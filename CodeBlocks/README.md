@@ -1,7 +1,7 @@
 # CodeBlocks
 **is::Engine Tutorial** for [Code::Blocks](http://www.codeblocks.org/).
 
-https://i48.servimg.com/u/f48/20/16/75/27/tutori10.png
+![PC Screenshot](https://i48.servimg.com/u/f48/20/16/75/27/tutori10.png)
 
 ---
 
