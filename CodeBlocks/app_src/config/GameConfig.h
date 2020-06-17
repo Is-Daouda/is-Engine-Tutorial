@@ -34,6 +34,20 @@ enum DisplayOption
 };
 
 ////////////////////////////////////////////////////////////
+/// \brief Allows to manipulate the window style
+///
+////////////////////////////////////////////////////////////
+enum WindowStyle
+{
+    NONE,       ///< No decoration at all
+    TITLEBAR,   ///< The window has a titlebar
+    RESIZE,     ///< The window can be resized and has a maximize button
+    CLOSE,      ///< The window has a close button
+    FULLSCREEN, ///< The window is shown in fullscreen mode
+    DEFAULT     ///< The default style, which is a shortcut for Titlebar | Resize | Close
+};
+
+////////////////////////////////////////////////////////////
 /// Allows to define the general parameters of the game and
 /// that the ad manager (Admob)
 ////////////////////////////////////////////////////////////
@@ -43,6 +57,8 @@ namespace GameConfig
     static const unsigned int WINDOW_HEIGHT  = 480; ///< Window height work only for PC Platform
     static const float        VIEW_WIDTH     = 640.f;
     static const float        VIEW_HEIGHT    = 480.f;
+    static const float        FPS            = 60.f; ///< Game FPS
+    static const is::WindowStyle WINDOW_SETTINGS = WindowStyle::DEFAULT; ///< Window style
 
     static const DisplayOption LAUNCH_OPTION = DisplayOption::MAIN_MENU; ///< Represents the first scene to be launched
 

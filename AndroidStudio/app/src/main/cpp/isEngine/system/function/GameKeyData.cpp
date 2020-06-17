@@ -62,8 +62,6 @@ void GameKeyData::loadResources(sf::Texture &tex)
     is::centerSFMLObj(m_recKeyDownMask);
     is::centerSFMLObj(m_recKeyAMask);
     is::centerSFMLObj(m_recKeyBMask);
-
-    step(0.f);
 }
 
 void GameKeyData::step(float const &DELTA_TIME)

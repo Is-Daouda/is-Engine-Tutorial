@@ -10,8 +10,9 @@
 /// Allows to browse object container (std::vector, ...)
 #define WITH(_SIZE) for(unsigned int _I = 0; _I < _SIZE; ++_I)
 
-#include "../entity/Form.h"
+#include "../entity/Forme.h"
 #include "../function/GameSystem.h"
+#include "../../../app_src/config/GameConfig.h"
 
 #if defined(__ANDROID__)
 // These headers are only needed for direct NDK/JDK interaction
@@ -613,6 +614,20 @@ bool mouseCollision(sf::RenderWindow &window, T const &obj, sf::RectangleShape &
     is::setSFMLObjX_Y(cursor, window.getView().getCenter().x + dx, window.getView().getCenter().y + dy);
     if (obj.getGlobalBounds().intersects(cursor.getGlobalBounds())) return true;
     else return false;
+}
+
+/// Do not touch this function it allows to manage the style of the window
+inline int getWindowStyle()
+{
+    switch (GameConfig::WINDOW_SETTINGS)
+    {
+        case WindowStyle::NONE : return sf::Style::None; break;
+        case WindowStyle::TITLEBAR : return sf::Style::Titlebar; break;
+        case WindowStyle::RESIZE : return sf::Style::Resize; break;
+        case WindowStyle::CLOSE : return sf::Style::Close; break;
+        case WindowStyle::FULLSCREEN : return sf::Style::Fullscreen; break;
+        default: return sf::Style::Default; break;
+    }
 }
 
 /// Allows to use Android vibrate
