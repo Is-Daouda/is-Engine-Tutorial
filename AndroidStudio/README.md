@@ -23,7 +23,7 @@
 - Move the **AndroidStudio project** of is::Engine to your **C:/** (C:/AndroidStudio)
 - Open the **AndroidStudio** folder with **Android Studio** and start the compilation.
 
-If all goes well you will have a *Helicopter Game* on your *Android emulator*
+If all goes well you will have a **Helicopter Game** on your **Android emulator**
 
 ![Image](https://github.com/Is-Daouda/is-Engine-Tutorial/blob/master/images/demo_screen_android.png)
 
