@@ -1,7 +1,5 @@
 # AndroidStudio
 **is::Engine Tutorial** for [Android Studio](https://developer.android.com/studio).
-You can download the full project [here](https://drive.google.com/open?id=1QIHZBkmYcy2YwZTfxk1ndv5rFMzk3sz1).
-*Useful when you have compilation problems or if you no longer want to recompile the project.*
 
 ---
 
@@ -9,7 +7,7 @@ You can download the full project [here](https://drive.google.com/open?id=1QIHZB
 
 - SFML Library (2.4 +)
 - Install Android Studio (3.1.3 +)
-- Android SDK and NDK (r12b)
+- Android SDK and NDK (r20b)
 - Firebase C++ SDK 4.5.0 (If you need it)
 
 ---
@@ -19,14 +17,14 @@ You can download the full project [here](https://drive.google.com/open?id=1QIHZB
 ### Windows
 - Download [Android Studio 3.x](https://developer.android.com/studio) (recommended version 3.1.3)
 - Download the [Android SDK](https://developer.android.com/studio) and install it in **C:/Android/SDK**
-- Download [Android NDK android-ndk-r12b-windows-x86_64](https://developer.android.com/ndk/downloads/older_releases.html) and create a folder on your disk as follows **C:/Android/NDK** then extract the contents of the zip in this folder.
+- Download [Android NDK android-ndk-r20b-windows-x86_64](https://developer.android.com/ndk/downloads/older_releases.html) and create a folder on your disk as follows **C:/Android/NDK** then extract the contents of the zip in this folder.
 - Set the environment variable **ANDROID_NDK** with the path **C:/Android/NDK**
-- Download this [version of SFML](https://github.com/Is-Daouda/is-Engine/tree/master/SFML_2.4.0_Build_For_NDK_r12b) already compiled for Android NDK and extract it in **C:/Android/NDK/sources/sfml**
-- Download now the engine tutorial which allows you to compile on Android [here](https://drive.google.com/open?id=1QIHZBkmYcy2YwZTfxk1ndv5rFMzk3sz1)
-- Extract the content in **C:/AndroidStudio**, open the **AndroidStudio** folder with **Android Studio** and start the compilation.
+- Download this [version of SFML](https://github.com/Is-Daouda/SFML-2.5.1-build-for-NDK-r20b) already compiled for Android NDK and extract it in **C:/Android/NDK/sources/sfml**
+- Move the **AndroidStudio project** of is::Engine to your **C:/** (C:/AndroidStudio)
+- Open the **AndroidStudio** folder with **Android Studio** and start the compilation.
 
-If all goes well you will have a *Helicopter game* on your *Android emulator*
+If all goes well you will have a *Helicopter Game* on your *Android emulator*
 
-![Image](https://i48.servimg.com/u/f48/20/16/75/27/tutori11.png)
+![Image](./images/demo_screen_android.png)
 
 **Enjoy!**

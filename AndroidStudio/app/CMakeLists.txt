@@ -145,7 +145,7 @@ target_link_libraries( # Specifies the target library.
                         EGL
                         GLESv1_CM
 
-                        sfml-system
+                        sfml-system-d
 
                         openal
 
@@ -153,11 +153,11 @@ target_link_libraries( # Specifies the target library.
                         # admob
                         # app
 
-                        sfml-window
-                        sfml-audio
-                        sfml-graphics
-                        sfml-network
-                        sfml-activity
-                        -Wl,--whole-archive sfml-main -Wl,--no-whole-archive
+                        sfml-window-d
+                        sfml-audio-d
+                        sfml-graphics-d
+                        sfml-network-d
+                        sfml-activity-d
+                        -Wl,--whole-archive sfml-main-d -Wl,--no-whole-archive
                         )
 

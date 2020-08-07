@@ -19,6 +19,7 @@ bool GameLevel::loadResources()
     if (!m_texDialog.loadFromFile(is::GameConfig::GUI_DIR + "dialog_box.png"))      return false;
     if (!m_texJoystick.loadFromFile(is::GameConfig::GUI_DIR + "game_pad.png")) return false;
     m_gameKey.loadResources(m_texJoystick);
+    m_gameKey.step(0.f);
 
     // sprites
     if (!m_texPlayer.loadFromFile(is::GameConfig::SPRITES_DIR + "player.png"))  return false;

@@ -1,8 +1,6 @@
 # VSCode
 **is::Engine Tutorial** for [Visual Studio Code](https://code.visualstudio.com/). This project was created with the template of **andrew-r-king**. For more information on this template [click here](https://github.com/andrew-r-king/sfml-vscode-boilerplate)
 
-![PC Screenshot](https://i48.servimg.com/u/f48/20/16/75/27/tutori10.png)
-
 ---
 
 ## Prerequisites
