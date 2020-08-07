@@ -25,6 +25,6 @@
 
 If all goes well you will have a *Helicopter Game* on your *Android emulator*
 
-![Image](./images/demo_screen_android.png)
+![Image](././images/demo_screen_android.png)
 
 **Enjoy!**

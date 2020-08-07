@@ -1,6 +1,6 @@
 # is::Engine Tutorial Project
 
-Project of the tutorial which is in the [user guide](https://github.com/Is-Daouda/is-Engine/tree/2.2.x/doc) of the game engine is::Engine. The project was built with these different components: **Virtual Game Pad, keyboard, standard engine function, scenes, language manager, sprite animation, RPG dialog box, basic collision engine, stopwatch.** transition.
+Project of the tutorial which is in the **[user guide](https://github.com/Is-Daouda/is-Engine/tree/2.2.x/doc)** of the game engine **[is::Engine](https://github.com/Is-Daouda/is-Engine)**. The project was built with these different components: **Virtual Game Pad, keyboard, standard engine function, scenes, language manager, sprite animation, RPG dialog box, basic collision engine, stopwatch.** transition.
 
 ### Android Screenshot
 ![Android Screenshot](./images/demo_screen_android.png)
