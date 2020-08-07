@@ -25,6 +25,6 @@
 
 If all goes well you will have a *Helicopter Game* on your *Android emulator*
 
-![Image](https://github.com/Is-Daouda/is-Engine-Tutorial/images/demo_screen_android.png)
+![Image](https://github.com/Is-Daouda/is-Engine-Tutorial/blob/master/images/demo_screen_android.png)
 
 **Enjoy!**
