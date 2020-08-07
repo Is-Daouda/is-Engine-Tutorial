@@ -1,6 +1,6 @@
 # is::Engine Tutorial Project
 
-Project of the tutorial which is in the [user guide](https://github.com/Is-Daouda/is-Engine/tree/2.2.x/doc) of the game engine is::Engine.
+Project of the tutorial which is in the [user guide](https://github.com/Is-Daouda/is-Engine/tree/2.2.x/doc) of the game engine is::Engine. The project was built with these different components: **Virtual Game Pad, keyboard, standard engine function, scenes, language manager, sprite animation, RPG dialog box, basic collision engine, stopwatch.** transition.
 
 ### Android Screenshot
 ![Android Screenshot](./images/demo_screen_android.png)
@@ -9,7 +9,7 @@ Project of the tutorial which is in the [user guide](https://github.com/Is-Daoud
 ![PC Screenshot](./images/demo_screen_pc.png)
 
 ## In this directory you have tree (4) projects :
-- **AndroidStudio**        : for Android development with Android Studio ([Project](https://drive.google.com/open?id=1QIHZBkmYcy2YwZTfxk1ndv5rFMzk3sz1))
+- **AndroidStudio**        : for Android development with Android Studio
 - **CodeBlocks**           : for PC development with Code::Blocks
 - **CMake**           	   : for PC development with CMake
 - **VSCode**               : for PC development with Visual Studio Code
