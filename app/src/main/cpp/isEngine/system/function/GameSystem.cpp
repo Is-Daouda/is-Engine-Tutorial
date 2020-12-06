@@ -33,8 +33,8 @@ bool GameSystem::isPressed(
     // When testing the two validation buttons on PC then consider it as a touch
     if (finger == -2) finger = 0;
     if (sf::Touch::isDown(finger)) return true;
-    #elif defined(IS_ENGINE_HTML_5)
-    if (m_window.input().IsCursorHold()) return true;
+    //#elif defined(IS_ENGINE_HTML_5)
+    //if (m_window.input().IsCursorHold()) return true;
     #else
     //////////////////////////////////////////////////////////
     switch (validationButton)
@@ -42,11 +42,12 @@ bool GameSystem::isPressed(
         case ValidationButton::MOUSE :
             if (
                 #if !defined(IS_ENGINE_HTML_5)
-                sf::Mouse::isButtonPressed
+                sf::Mouse::isButtonPressed(m_validationMouseKey)
                 #else
-                m_window.input().IsMousePressed
+                //m_window.input().IsMousePressed
+                m_window.input().IsCursorHold()
                 #endif
-                (m_validationMouseKey)) return true;
+                ) return true;
         break;
         case ValidationButton::KEYBOARD :
             if (
@@ -60,11 +61,12 @@ bool GameSystem::isPressed(
         case ValidationButton::ALL_BUTTONS :
             if (
                 #if !defined(IS_ENGINE_HTML_5)
-                sf::Mouse::isButtonPressed
+                sf::Mouse::isButtonPressed(m_validationMouseKey)
                 #else
-                m_window.input().IsMousePressed
+                //m_window.input().IsMousePressed
+                m_window.input().IsCursorHold()
                 #endif
-                (m_validationMouseKey)) return true;
+                ) return true;
             else if (
                      #if !defined(IS_ENGINE_HTML_5)
                      sf::Keyboard::isKeyPressed
@@ -74,7 +76,7 @@ bool GameSystem::isPressed(
                      (m_validationKeyboardKey)) return true;
         break;
     }
-    #endif // defined
+    #endif
     return false;
 }
 

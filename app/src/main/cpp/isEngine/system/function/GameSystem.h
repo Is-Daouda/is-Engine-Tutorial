@@ -2,13 +2,18 @@
 #define GAMESYSTEM_H_INCLUDED
 
 #include "GameFunction.h"
+#if defined(__ANDROID__)
+#if defined(IS_ENGINE_USE_ADMOB)
+#include "../android/AdmobManager.h"
+#endif
+#endif // defined
 
 //////////////////////////////////////////////////////
 // is::Engine version
 //////////////////////////////////////////////////////
 #define IS_ENGINE_VERSION_MAJOR 3
-#define IS_ENGINE_VERSION_MINOR 1
-#define IS_ENGINE_VERSION_PATCH 1
+#define IS_ENGINE_VERSION_MINOR 2
+#define IS_ENGINE_VERSION_PATCH 0
 
 namespace is
 {
@@ -154,6 +159,12 @@ public:
     float m_padDirXPos, m_padDirYPos, m_padActionXPos, m_padActionYPos;
     float m_defaultPadDirXPos, m_defaultPadDirYPos, m_defaultPadActionXPos, m_defaultPadActionYPos;
     bool  m_permutePadAB;
+
+#if defined(__ANDROID__)
+#if defined(IS_ENGINE_USE_ADMOB)
+        std::shared_ptr<AdmobManager> m_admobManager;
+#endif
+#endif
 
     /// Application
     sf::RenderWindow &m_window;

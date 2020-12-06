@@ -35,7 +35,7 @@ android {
     defaultConfig {
         applicationId "com.author.isengine"
         //Replace this with your real package name (e.g. com.StudioName.GameName)
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"

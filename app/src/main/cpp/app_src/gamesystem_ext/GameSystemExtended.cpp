@@ -47,7 +47,7 @@ void GameSystemExtended::initSystemData()
 
 void GameSystemExtended::initData(bool clearCurrentLevel)
 {
-    if (clearCurrentLevel) m_currentLevel = 3; // LEVEL 1
+    if (clearCurrentLevel) m_currentLevel = 0; // LEVEL 1
     m_currentLives = 3;
     m_currentBonus = 0;
     m_currentScore = 0;

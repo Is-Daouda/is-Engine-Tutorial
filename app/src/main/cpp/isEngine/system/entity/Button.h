@@ -17,7 +17,7 @@ public:
         m_scene(scene),
         m_isInCollision(false)
     {
-        m_strName = std::string((name == "" || name == " ") ? "Button_" + MainObject::instanceNumber : name); // object name
+        m_strName = std::string((name == "" || name == " ") ? "Button_" + is::numToStr(MainObject::instanceNumber) : name); // object name
         m_w = tex.getSize().x / 2;
         m_h = tex.getSize().y;
         if (!center)
@@ -28,6 +28,25 @@ public:
         is::createSprite(tex, m_sprParent, sf::IntRect(0, 0, m_w, m_h),
                          sf::Vector2f(m_x, m_y), sf::Vector2f(m_w / 2.f, m_h / 2.f));
         is::createText(scene->getFontSystem(), m_txtTitle, title, m_x, m_y, is::GameConfig::DEFAULT_BUTTON_TEXT_COLOR, true, m_h / 2);
+        m_SDMcallEvent = true;
+    }
+
+    Button(sf::Texture &tex, sf::Font &font, float x, float y, std::string const &title, std::string const &name, bool center, int textSize, GameDisplay *scene):
+        MainObject(x ,y),
+        m_scene(scene),
+        m_isInCollision(false)
+    {
+        m_strName = std::string((name == "" || name == " ") ? "Button_" + is::numToStr(MainObject::instanceNumber) : name); // object name
+        m_w = tex.getSize().x / 2;
+        m_h = tex.getSize().y;
+        if (!center)
+        {
+            m_xOffset = m_w / 2.f;
+            m_yOffset = m_h / 2.f;
+        }
+        is::createSprite(tex, m_sprParent, sf::IntRect(0, 0, m_w, m_h),
+                         sf::Vector2f(m_x, m_y), sf::Vector2f(m_w / 2.f, m_h / 2.f));
+        is::createText(font, m_txtTitle, title, m_x, m_y, is::GameConfig::DEFAULT_BUTTON_TEXT_COLOR, true, textSize);
         m_SDMcallEvent = true;
     }
 
@@ -46,10 +65,14 @@ public:
     /// This method must be overloaded
     virtual void onMouseOver()
     {
-        is::showLog("WARNING: Button::onMouseOver() method must be overloaded!");
+        // is::showLog("WARNING: Button::onMouseOver() method must be overloaded!");
     }
 
-    virtual void event(sf::Event &event)
+    virtual void mouseAction(
+                             #if !defined(IS_ENGINE_HTML_5)
+                             sf::Event &event
+                             #endif // defined
+                             )
     {
         if (m_isInCollision)
         {
@@ -63,13 +86,24 @@ public:
                                1.f;
                                #endif
             };
-            if (event.type == sf::Event::MouseButtonPressed)
+            if (
+                #if !defined(IS_ENGINE_HTML_5)
+                event.type == sf::Event::MouseButtonPressed
+                #else
+                m_scene->getRenderWindow().input().IsCursorReleased()
+                #endif
+                )
             {
-                if (event.key.code == sf::Mouse::Left)
+                #if !defined(IS_ENGINE_HTML_5)
+                if (event.key.code == 0 /* mouse left */)
                 {
+                #endif
                     functionClick();
+                #if !defined(IS_ENGINE_HTML_5)
                 }
+                #endif
             }
+            #if defined(__ANDROID__)
             if (event.type == sf::Event::TouchEnded)
             {
                 if (event.touch.finger == 0)
@@ -77,8 +111,16 @@ public:
                     functionClick();
                 }
             }
+            #endif
         }
     }
+
+#if !defined(IS_ENGINE_HTML_5)
+    virtual void event(sf::Event &event)
+    {
+        mouseAction(event);
+    }
+#endif
 
     virtual void step(float const &DELTA_TIME)
     {
@@ -94,6 +136,9 @@ public:
                             #endif // defined
             m_isInCollision = true;
         }
+        #if defined(IS_ENGINE_HTML_5)
+        mouseAction();
+        #endif // defined
         is::setSFMLObjTexRec(m_sprParent, ((m_isInCollision) ? 1 : 0) * m_w, 0, m_w, m_h);
         if (!tempCollision)
         {

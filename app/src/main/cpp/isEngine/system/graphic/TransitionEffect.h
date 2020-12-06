@@ -23,7 +23,7 @@ public:
             m_transitionEnd = false;
         m_type = type;
     }
-    bool getTransitionEnd() const {return m_transitionEnd;}
+    bool getTransitionEnd(int type) const {return (m_transitionEnd && m_type == type);}
     sf::RectangleShape& getRecTransition() {return m_recTransition;}
 
 private:

@@ -3,6 +3,7 @@
 
 #if !defined(__ANDROID__)
 #include "../../ext_lib/TinyFileDialogs/tinyfiledialogs.h"
+#include "../../system/function/GameFunction.h"
 
 ////////////////////////////////////////////////////////////
 /// tinyString is a custom type it changes depending on the target platform (windows / linux)

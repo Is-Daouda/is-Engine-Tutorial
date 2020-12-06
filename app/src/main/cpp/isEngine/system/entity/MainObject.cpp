@@ -648,6 +648,16 @@ float MainObject::getSpriteY() const
     return m_sprParent.getPosition().y;
 }
 
+int MainObject::getTextureWidth() const
+{
+    return is::getSFMLTextureWidth(m_sprParent.getTexture());
+}
+
+int MainObject::getTextureHeight() const
+{
+    return is::getSFMLTextureHeight(m_sprParent.getTexture());
+}
+
 int MainObject::getSpriteCenterX() const
 {
     return (m_sprParent.getTextureRect().width / 2);
@@ -656,6 +666,11 @@ int MainObject::getSpriteCenterX() const
 int MainObject::getSpriteCenterY() const
 {
     return (m_sprParent.getTextureRect().height / 2);
+}
+
+int MainObject::getSpriteNumberSubImage(int subImageWidth) const
+{
+    return (m_sprParent.getTexture()->getSize().x / subImageWidth);
 }
 
 bool MainObject::placeMettingSubFunction(float x, float y, MainObject const *other) const

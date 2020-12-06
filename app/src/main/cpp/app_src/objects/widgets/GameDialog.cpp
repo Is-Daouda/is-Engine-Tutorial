@@ -18,11 +18,11 @@ GameDialog::GameDialog(sf::Texture &tex, sf::Font &fnt, GameDisplay *m_scene) :
     m_strName = "GameDialog"; // object name
 
     m_imageScale = 0.f;
-    is::createText(fnt, m_txtDialog, "", m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_TEXT_COLOR, false, 16);
+    is::createText(fnt, m_txtDialog, "", m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_TEXT_COLOR, 16);
     is::createText(fnt, m_txtSkip, is::lang::pad_dialog_skip[m_scene->getGameSystem().m_gameLanguage],
-                   m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_SELECTED_TEXT_COLOR, false, 13);
+                   m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_SELECTED_TEXT_COLOR, true, 13);
     m_strDialog = L"";
-    is::createSprite(tex, m_sprParent, sf::IntRect(0, 0, 480, 96), sf::Vector2f(0.f, 0.f), sf::Vector2f(240.f, 48.f), true);
+    is::createSprite(tex, m_sprParent, sf::IntRect(0, 0, 480, 96), sf::Vector2f(0.f, 0.f), sf::Vector2f(240.f, 48.f));
     is::createSprite(tex, m_sprNext, sf::IntRect(64, 96, 32, 32), sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
     is::createSprite(tex, m_sprSkip, sf::IntRect(0, 96, 64, 24), sf::Vector2f(0.f, 0.f), sf::Vector2f(32.f, 12.f));
     is::setSFMLObjScale(m_txtDialog, 0.f);
@@ -36,13 +36,11 @@ void GameDialog::step(const float &DELTA_TIME)
 {
     if (m_showDialog)
     {
-        if (!m_scene->getGameSystem().keyIsPressed(is::GameConfig::KEY_A) && !m_scene->getGameSystem().isPressed())
+        if (!m_scene->getGameSystem().keyIsPressed(is::GameConfig::KEY_A) && !m_scene->getGameSystem().isPressed(is::GameSystem::MOUSE))
             m_scene->getGameSystem().m_keyIsPressed = false;
-        if (!m_scene->mouseCollision(m_sprParent) && m_scene->getGameSystem().isPressed())
-            m_scene->getGameSystem().m_keyIsPressed = true;
+
         setPosition(m_scene->getViewX(), m_scene->getViewY() + 32.f);
 
-        m_mouseInCollison = false;
         float const _VAL(is::getMSecond(DELTA_TIME));
         m_time += (0.8f * is::VALUE_CONVERSION) * DELTA_TIME;
         m_blindTime += _VAL;
@@ -95,7 +93,10 @@ void GameDialog::step(const float &DELTA_TIME)
             m_dialogEnd = true;
         }
 
-        if (m_scene->mouseCollision(m_sprParent)) m_mouseInCollison = true;
+        m_mouseInCollison = m_scene->mouseCollision(m_sprParent);
+        if (!m_mouseInCollison && m_scene->getGameSystem().isPressed(is::GameSystem::MOUSE))
+            m_scene->getGameSystem().m_keyIsPressed = true;
+
         if ((m_scene->getGameSystem().keyIsPressed(is::GameConfig::KEY_A) ||
             (m_scene->getGameSystem().isPressed(is::GameSystem::ValidationButton::MOUSE) && m_mouseInCollison)) &&
             !m_scene->getGameSystem().m_keyIsPressed && !m_dialogEnd)

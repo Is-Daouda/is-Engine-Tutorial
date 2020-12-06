@@ -39,7 +39,7 @@ GameKeyData::GameKeyData(is::GameDisplay *scene) :
 
 void GameKeyData::loadResources()
 {
-    auto &tex = m_scene->GRMgetTexture("game_pad");
+    auto &tex = m_scene->GRMaddTexture("game_pad", is::GameConfig::GUI_DIR + "game_pad.png");
     is::createSprite(tex, m_sprJoystick[0], sf::IntRect(0, 0, 134, 134), sf::Vector2f(0.f, 0.f), sf::Vector2f(67.f, 67.f));
     is::createSprite(tex, m_sprJoystick[1], sf::IntRect(134, ((!m_scene->getGameSystem().m_permutePadAB) ? 0 : 67), 144, 67),
                      sf::Vector2f(0.f, 0.f), sf::Vector2f(72.f, 37.f));
@@ -90,24 +90,36 @@ void GameKeyData::step(float const &DELTA_TIME)
         m_keyRightPressed = false;
         m_keyUpPressed = false;
         m_keyDownPressed = false;
+#if !defined(__ANDROID__)
+        m_moveKeyPressed = V_KEY_LEFT;
+#endif
     }
     else if (m_keyRightPressed)
     {
         m_keyLeftPressed = false;
         m_keyUpPressed = false;
         m_keyDownPressed = false;
+#if !defined(__ANDROID__)
+        m_moveKeyPressed = V_KEY_RIGHT;
+#endif
     }
     else if (m_keyUpPressed)
     {
         m_keyLeftPressed = false;
         m_keyRightPressed = false;
         m_keyDownPressed = false;
+#if !defined(__ANDROID__)
+        m_moveKeyPressed = V_KEY_UP;
+#endif
     }
     else if (m_keyDownPressed)
     {
         m_keyLeftPressed = false;
         m_keyRightPressed = false;
         m_keyUpPressed = false;
+#if !defined(__ANDROID__)
+        m_moveKeyPressed = V_KEY_DOWN;
+#endif
     }
 
 #if defined(__ANDROID__)
@@ -150,6 +162,11 @@ void GameKeyData::step(float const &DELTA_TIME)
         is::setSFMLObjX_Y(m_recJoystickMask[i], is::getSFMLObjX(m_sprJoystick[i]) + ((i == 0) ? moveMaskOnX : 0.f), is::getSFMLObjY(m_sprJoystick[i]));
         is::setSFMLObjAlpha(m_sprJoystick[i], m_scene->getGameSystem().m_padAlpha);
     }
+#else
+    if (m_keyAPressed) m_actionKeyPressed = V_KEY_A;
+    else if (m_keyBPressed) m_actionKeyPressed = V_KEY_B;
+    else m_actionKeyPressed = V_KEY_NONE;
+    if (!m_keyLeftPressed && !m_keyRightPressed && !m_keyUpPressed && !m_keyDownPressed) m_moveKeyPressed = V_KEY_NONE;
 #endif // defined
 }
 
@@ -344,7 +361,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_moveKeyPressed = V_KEY_LEFT;
-                        is::showLog("L Pressed !");
+                        // is::showLog("L Pressed !");
                         return true;
                     }
                 break;
@@ -356,7 +373,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_moveKeyPressed = V_KEY_RIGHT;
-                        is::showLog("R Pressed !");
+                        // is::showLog("R Pressed !");
                         return true;
                     }
                 break;
@@ -368,7 +385,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_moveKeyPressed = V_KEY_UP;
-                        is::showLog("U Pressed !");
+                        // is::showLog("U Pressed !");
                         return true;
                     }
                 break;
@@ -380,7 +397,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_moveKeyPressed = V_KEY_DOWN;
-                        is::showLog("D Pressed !");
+                        // is::showLog("D Pressed !");
                         return true;
                     }
                 break;
@@ -418,7 +435,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_actionKeyPressed = V_KEY_A;
-                        is::showLog("A Pressed !");
+                        // is::showLog("A Pressed !");
                         return true;
                     }
                 break;
@@ -431,7 +448,7 @@ bool GameKeyData::virtualKeyPressed(VirtualKeyIndex virtualKeyIndex)
                         )
                     {
                         m_actionKeyPressed = V_KEY_B;
-                        is::showLog("B Pressed !");
+                        // is::showLog("B Pressed !");
                         return true;
                     }
                 break;

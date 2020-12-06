@@ -71,9 +71,8 @@ bool GameEngine::play()
     JavaVM* vm = activity->vm;
     vm->AttachCurrentThread(&env, NULL);
 
-    AdmobManager *admobManager = nullptr;
-    admobManager = new AdmobManager(m_window, activity, env, vm);
-    admobManager->checkAdObjInit();
+    m_gameSysExt.m_admobManager = std::make_shared<AdmobManager>(m_window, activity, env, vm);
+    m_gameSysExt.m_admobManager->checkAdObjInit();
     #endif // definded
     #endif // defined
 
@@ -115,16 +114,6 @@ bool GameEngine::play()
     }
     #if defined(IS_ENGINE_HTML_5)
     );
-    #endif // defined
-
-    #if defined(__ANDROID__)
-    #if defined(IS_ENGINE_USE_ADMOB)
-     if (is::instanceExist(admobManager))
-     {
-         delete admobManager;
-         admobManager = 0;
-     }
-    #endif
     #endif // defined
     return true;
 }

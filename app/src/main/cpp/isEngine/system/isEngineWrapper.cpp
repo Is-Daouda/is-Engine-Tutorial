@@ -41,8 +41,8 @@ bool Rect::intersects(Rect const &rec1, Rect const &rec2) const
 Rect functionGetGlobalBounds(const Vector2f &position, const Vector2f &origin, const Vector2f &size)
 {
     Rect aabb;
-    aabb.left   = position.x;
-    aabb.top    = position.y;
+    aabb.left   = position.x - origin.x;
+    aabb.top    = position.y - origin.y;
     aabb.width  = size.x;
     aabb.height = size.y;
     return aabb;
@@ -76,6 +76,13 @@ void setObjectWrapperColor(Color &color, float red, float green, float blue, flo
     if (alpha > 1.f) color.a = alpha / 255.f; else color.a = alpha;
 }
 
+void Sprite::setTexture(sf::Texture& texture)
+{
+    SetTexture(texture);
+    is::setVector2(m_size, texture.width(), texture.height());
+    m_texture = &texture;
+}
+
 void Sprite::setTextureRect(IntRect rec)
 {
     smk::Rectangle smkRec;
@@ -87,12 +94,26 @@ void Sprite::setTextureRect(IntRect rec)
     is::setVector2(m_size, smkRec.width(), smkRec.height());
 }
 
+Texture::Texture(const std::string& filename): smk::Texture(filename)
+{
+    is::setVector2(m_size, width(), height());
+}
+
 void Shape::setSize(float x, float y)
 {
     float xScale = (x * m_scale.x) / m_size.x;
     float yScale = (y * m_scale.y) / m_size.y;
     is::setVector2(m_size, x, y);
     setScale(xScale, yScale);
+}
+
+RectangleShape::RectangleShape() : Shape(RoundedRectangle(32.f, 32.f, 0.f)) {is::setVector2(ObjectWrapper::m_size, 32.f, 32.f);}
+
+CircleShape::CircleShape() : Shape(smk::Shape::Circle(32.f)) {is::setVector2(m_size, 32.f, 32.f);}
+
+void CircleShape::setRadius(float raduis)
+{
+    setSize(raduis, raduis);
 }
 
 smk::Transformable RectangleShape::RoundedRectangle(float width, float height, float radius)
@@ -147,18 +168,83 @@ Font::Font(const std::string& filename, float line_height) : smk::Font(filename,
     m_filename = filename;
 }
 
+Clock::Clock() : m_startTime(seconds(0.018f)) {}
+const Time Clock::getElapsedTime()
+{
+    return m_startTime;
+}
+Time Clock::restart()
+{
+    return m_startTime;
+}
+
 void Sound::setVolume(float volume)
 {
     SetVolume(1.f / volume);
 }
 
+View::View(const Vector2f& center, const Vector2f& size)
+{
+    setSize(size.x, size.y);
+    setCenter(center.x, center.y);
+}
+
+View::View()
+{
+    setSize(640.f, 480.f);
+    setCenter(320.f, 240.f);
+}
+
+/*
+sf::View(const FloatRect& rectangle)
+{
+
+}
+*/
+
 Vector2i Mouse::getPosition(RenderWindow &window)
 {
-    Vector2i position(-1, -1);
+    Vector2i mousePosition(-1, -1);
     glm::vec2 p1 = window.input().cursor();
     p1 -= window.dimension() * 0.125f;
-    is::setVector2(position, p1[0], p1[1]);
-    return position;
+    is::setVector2(mousePosition, p1[0], p1[1]);
+
+    float addX(0.f), addY(0.f);
+    float xDiv(2.95f), yDiv(2.95);
+    float const x1(300.f), x2(340.f);
+    float const y1(200.f), y2(300.f);
+
+    // x < param
+    if (mousePosition.x < 220.f) xDiv = 3.5f;
+    if (mousePosition.x < 160.f) xDiv = 4.f;
+
+    // x > param
+    if (mousePosition.x > 380.f) xDiv = 3.5f;
+    if (mousePosition.x > 440.f) xDiv = 4.f;
+    if (mousePosition.x > 500.f) xDiv = 4.5f;
+    if (mousePosition.x > 560.f) xDiv = 5.f;
+    if (mousePosition.x > 620.f) xDiv = 5.5f;
+    if (mousePosition.x > 680.f) xDiv = 6.f;
+    if (mousePosition.x > 740.f) xDiv = 6.5f;
+    if (mousePosition.x > 800.f) xDiv = 7.f;
+    if (mousePosition.x < x1) addX = is::pointDistance(mousePosition.x, 0.f, x1, 0.f) / xDiv;
+    if (mousePosition.x > x2) addX = -is::pointDistance(mousePosition.x, 0.f, x2, 0.f) / xDiv;
+
+    // y < param
+    if (mousePosition.y < 220.f) yDiv = 3.f;
+    if (mousePosition.y < 70.f) yDiv = 3.5f;
+    if (mousePosition.y < 10.f) yDiv = 4.f;
+
+    // y > param
+    if (mousePosition.y > 360.f) yDiv = 3.5f;
+    if (mousePosition.y > 420.f) yDiv = 4.f;
+    if (mousePosition.y > 480.f) yDiv = 4.5f;
+    if (mousePosition.y > 540.f) yDiv = 5.f;
+    if (mousePosition.y > 600.f) yDiv = 5.5f;
+    if (mousePosition.y < y1) addY = is::pointDistance(0.f, mousePosition.y, 0.f, y1) / yDiv;
+    if (mousePosition.y > y2) addY = -is::pointDistance(0.f, mousePosition.y, 0.f, y2) / yDiv;
+
+    return Vector2i(mousePosition.x + addX, mousePosition.y + addY);
 }
 
 Vector2i Touch::getPosition(unsigned int finger, RenderWindow &window)
@@ -178,5 +264,73 @@ Vector2i Touch::getPosition(unsigned int finger, RenderWindow &window)
     }
     return position;
 }
+
+////////////////////////////////////////////////////////////
+//              Time Operator and Function
+////////////////////////////////////////////////////////////
+const Time Time::Zero;
+
+// functions
+Time seconds(float amount)
+{
+    // Special case: allows the SMK timer to have the same behavior as that of the SFML Pong example
+    if (amount > 0.09f && amount < 0.101f)
+    {
+        sf::Clock dTime;
+        amount = dTime.getElapsedTime().asSeconds() - 0.01f;
+    }
+    return Time(static_cast<Int64>(amount * 1000000));
+}
+Time milliseconds(Int32 amount) {return Time(static_cast<Int64>(amount) * 1000);}
+Time microseconds(Int64 amount) {return Time(amount);}
+
+// operator
+inline bool operator ==(Time left, Time right) {return left.asMicroseconds() == right.asMicroseconds();}
+
+inline bool operator !=(Time left, Time right) {return left.asMicroseconds() != right.asMicroseconds();}
+
+inline bool operator <(Time left, Time right) {return left.asMicroseconds() < right.asMicroseconds();}
+
+inline bool operator >(Time left, Time right) {return left.asMicroseconds() > right.asMicroseconds();}
+
+inline bool operator <=(Time left, Time right){return left.asMicroseconds() <= right.asMicroseconds();}
+
+inline bool operator >=(Time left, Time right){return left.asMicroseconds() >= right.asMicroseconds();}
+
+inline Time operator -(Time right) {return microseconds(-right.asMicroseconds());}
+
+inline Time operator +(Time left, Time right) {return microseconds(left.asMicroseconds() + right.asMicroseconds());}
+
+inline Time& operator +=(Time& left, Time right) {return left = left + right;}
+
+inline Time operator -(Time left, Time right) {return microseconds(left.asMicroseconds() - right.asMicroseconds());}
+
+inline Time& operator -=(Time& left, Time right) {return left = left - right;}
+
+inline Time operator *(Time left, float right) {return seconds(left.asSeconds() * right);}
+
+inline Time operator *(Time left, Int64 right) {return microseconds(left.asMicroseconds() * right);}
+
+inline Time operator *(float left, Time right) {return right * left;}
+
+inline Time operator *(Int64 left, Time right) {return right * left;}
+
+inline Time& operator *=(Time& left, float right) {return left = left * right;}
+
+inline Time& operator *=(Time& left, Int64 right) {return left = left * right;}
+
+inline Time operator /(Time left, float right) {return seconds(left.asSeconds() / right);}
+
+inline Time operator /(Time left, Int64 right) {return microseconds(left.asMicroseconds() / right);}
+
+inline Time& operator /=(Time& left, float right) {return left = left / right;}
+
+inline Time& operator /=(Time& left, Int64 right) {return left = left / right;}
+
+inline float operator /(Time left, Time right) {return left.asSeconds() / right.asSeconds();}
+
+inline Time operator %(Time left, Time right) {return microseconds(left.asMicroseconds() % right.asMicroseconds());}
+
+inline Time& operator %=(Time& left, Time right) {return left = left % right;}
 }
 #endif

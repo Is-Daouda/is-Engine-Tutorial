@@ -1,11 +1,7 @@
 #ifndef GAMEKEYDATA_H_INCLUDED
 #define GAMEKEYDATA_H_INCLUDED
 
-#if defined(IS_ENGINE_USE_SDM)
-#include "../entity/MainObject.h"
-#else
 #include "../display/GameDisplay.h"
-#endif // defined
 
 namespace is
 {

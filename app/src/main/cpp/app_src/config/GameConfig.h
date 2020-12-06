@@ -14,7 +14,7 @@ namespace is
 enum DisplayOption
 {
     // example
-    // YOUR_SCENE, ///< Access to your scene
+    // YOUR_SCENE ///< Access to your scene
 };
 
 ////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ namespace GameConfig
     static const std::string MINOR = "0"; ///< Game minor version
     inline std::string getGameVersion() {return MAJOR + "." + MINOR;} ///< return version of the game
 
-    static std::string const GAME_NAME     = "Hello"; ///< Windows title name
+    static std::string const GAME_NAME     = "Arkanoid"; ///< Windows title name
     static std::string const GAME_AUTHOR   = "Author";
 
     #if defined(IS_ENGINE_USE_ADMOB)

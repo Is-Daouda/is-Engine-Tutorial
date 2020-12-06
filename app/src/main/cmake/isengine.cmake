@@ -1,35 +1,7 @@
-# engine source file
+# box 2d source file
 set(
-	commun_sources
+	box2d_sources
 	
-	${ISENGINE_SRC_DIR}/main.cpp
-
-	# Basic SFML rendering loop
-	${ISENGINE_SRC_DIR}/basicSFMLmain.cpp
-
-	# core
-	${ISENGINE_SRC_DIR}/isEngine/core/GameEngine.cpp
-
-	# system
-	${ISENGINE_SRC_DIR}/isEngine/system/isEngineWrapper.cpp
-	
-	# display
-	${ISENGINE_SRC_DIR}/isEngine/system/display/GameDisplay.cpp
-	
-	# entity
-	${ISENGINE_SRC_DIR}/isEngine/system/entity/MainObject.cpp
-	
-	# graphic
-	${ISENGINE_SRC_DIR}/isEngine/system/graphic/TransitionEffect.cpp
-	
-	# function
-	${ISENGINE_SRC_DIR}/isEngine/system/function/GameFunction.cpp		
-	${ISENGINE_SRC_DIR}/isEngine/system/function/GameKeyData.cpp
-	${ISENGINE_SRC_DIR}/isEngine/system/function/GameSlider.cpp
-	${ISENGINE_SRC_DIR}/isEngine/system/function/GameSystem.cpp
-	${ISENGINE_SRC_DIR}/isEngine/system/function/GameTime.cpp
-	
-	# box 2d source
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Collision/b2BroadPhase.cpp
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Collision/b2CollideCircle.cpp
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Collision/b2CollideEdge.cpp
@@ -75,6 +47,40 @@ set(
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Dynamics/Joints/b2RopeJoint.cpp
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Dynamics/Joints/b2WeldJoint.cpp
 	${ISENGINE_SRC_DIR}/isEngine/ext_lib/Box2D/Dynamics/Joints/b2WheelJoint.cpp
+)
+
+# engine source file
+set(
+	commun_sources
+	
+	${ISENGINE_SRC_DIR}/main.cpp
+
+	# Basic SFML rendering loop
+	${ISENGINE_SRC_DIR}/basicSFMLmain.cpp
+
+	# core
+	${ISENGINE_SRC_DIR}/isEngine/core/GameEngine.cpp
+
+	# system
+	${ISENGINE_SRC_DIR}/isEngine/system/isEngineWrapper.cpp
+	
+	# display
+	${ISENGINE_SRC_DIR}/isEngine/system/display/GameDisplay.cpp
+	
+	# entity
+	${ISENGINE_SRC_DIR}/isEngine/system/entity/MainObject.cpp
+	
+	# graphic
+	${ISENGINE_SRC_DIR}/isEngine/system/graphic/TransitionEffect.cpp
+
+	# function
+	${ISENGINE_SRC_DIR}/isEngine/system/function/GameFunction.cpp		
+	${ISENGINE_SRC_DIR}/isEngine/system/function/GameKeyData.cpp
+	${ISENGINE_SRC_DIR}/isEngine/system/function/GameSlider.cpp
+	${ISENGINE_SRC_DIR}/isEngine/system/function/GameSystem.cpp
+	${ISENGINE_SRC_DIR}/isEngine/system/function/GameTime.cpp
+	
+	${box2d_sources}
 )
 
 # tmx lite

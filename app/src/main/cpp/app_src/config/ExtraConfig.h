@@ -20,6 +20,9 @@
 // Uncomment to enable this function
 #define IS_ENGINE_OPTIMIZE_PERF ///< Allows to activate the optimization in certain parts of the engine
 
+// Uncomment to enable SHOW LOG function
+#define IS_ENGINE_USE_SHOWLOG ///< Allows to show log in console
+
 #if defined(__ANDROID__)
 // Uncomment this line (definition of the Preporcessor which is below) to use Admob
 // If you enable Admob you need to uncomment line in CMakeLists

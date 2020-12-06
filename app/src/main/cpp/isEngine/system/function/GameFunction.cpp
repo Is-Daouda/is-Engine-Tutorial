@@ -58,13 +58,6 @@ int sign(float x)
     else return 0;
 }
 
-float pointDistance(float x1, float y1, float x2, float y2)
-{
-    float X = x1 - x2;
-    float Y = y1 - y2;
-    return sqrt(X * X + Y * Y);
-}
-
 float pointDirection(float x1, float y1, float x2, float y2)
 {
     return atan((y1 - y2) / (x1 - x2));
@@ -315,6 +308,35 @@ void createSprite(sf::Texture &tex, sf::Sprite &spr, sf::IntRect rec, sf::Vector
     createSprite(tex, spr, rec, position, origin, repeatTexture, smooth);
     is::setSFMLObjScaleX_Y(spr, scale.x, scale.y);
     is::setSFMLObjAlpha(spr, alpha);
+}
+
+sf::Vector2f getCursor(sf::RenderWindow &window
+                        #if defined(__ANDROID__)
+                        , unsigned int finger
+                        #endif // defined
+                        )
+{
+    sf::Vector2i pixelPos =
+    #if defined(__ANDROID__)
+                            sf::Touch::getPosition(finger, window);
+    #else
+                            sf::Mouse::getPosition(window);
+    #endif // defined
+
+    #if !defined(IS_ENGINE_HTML_5)
+    sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, window.getView());
+    #else
+    sf::Vector2i worldPos = pixelPos;
+    #endif
+    float dx = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
+                             worldPos.x, window.getView().getCenter().y);
+    float dy = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
+                             window.getView().getCenter().x, worldPos.y);
+
+    if (worldPos.x < window.getView().getCenter().x) dx *= -1;
+    if (worldPos.y < window.getView().getCenter().y) dy *= -1;
+
+    return sf::Vector2f(window.getView().getCenter().x + dx, window.getView().getCenter().y + dy);
 }
 
 short vibrate(short duration)

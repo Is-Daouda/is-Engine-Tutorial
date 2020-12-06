@@ -3,6 +3,7 @@
 
 #if defined(IS_ENGINE_HTML_5)
 #include <smk/Color.hpp>
+#include <exception>
 #endif
 
 namespace is
@@ -11,6 +12,14 @@ namespace is
 inline void closeApplication()
 {
     std::terminate();
+}
+
+/// Return distance between two points (x1, y1) and (x2, y2)
+inline float pointDistance(float x1, float y1, float x2, float y2)
+{
+    float X = x1 - x2;
+    float Y = y1 - y2;
+    return sqrt(X * X + Y * Y);
 }
 
 template <class T1, typename T2>
@@ -22,7 +31,7 @@ void setVector2(T1 &v, T2 x, T2 y)
 
 /// Clear render
 template <class T1, class T2>
-void clear(T1 &render, T2 color)
+void clear(T1 &render, T2 const &color)
 {
     #if !defined(IS_ENGINE_HTML_5)
     render.clear(color);
@@ -33,6 +42,17 @@ void clear(T1 &render, T2 color)
     smkColor[2] = color.b;
     smkColor[3] = color.a;
     render.Clear(smkColor);
+    #endif
+}
+
+template <class T1>
+void clear(T1 &render)
+{
+    render.
+    #if !defined(IS_ENGINE_HTML_5)
+            clear();
+    #else
+            Clear(smk::Color::Black);
     #endif
 }
 
@@ -109,6 +129,16 @@ inline void functionNotSupported(const std::string &className, const std::string
 }
 */
 
+typedef char Int8;
+typedef short Int16;
+typedef int Int32;
+typedef long Int64;
+
+typedef unsigned char Uint8;
+typedef unsigned short Uint16;
+typedef unsigned int Uint32;
+typedef unsigned long Uint64;
+
 template <typename T>
 class Vector2
 {
@@ -120,6 +150,9 @@ public:
     T x;
     T y;
 };
+
+#include "isEngineVector2Wrapper.inl"
+
 typedef Vector2<int>          Vector2i;
 typedef Vector2<unsigned int> Vector2u;
 typedef Vector2<float>        Vector2f;
@@ -218,10 +251,8 @@ class Texture : public smk::Texture
 {
 public:
     Texture(): smk::Texture() {}
-    Texture(const std::string& filename): smk::Texture(filename)
-    {
-        is::setVector2(m_size, width(), height());
-    }
+    Texture(const std::string& filename);
+
     const Vector2u& getSize() const noexcept
     {
         return m_size;
@@ -239,10 +270,13 @@ private:
 class View : public smk::View
 {
 public:
+    View(const Vector2f& center, const Vector2f& size);
+    View(const FloatRect& rectangle);
+    View();
+
     void setCenter(float x, float y)
     {
-        m_center.x = x;
-        m_center.y = y;
+        is::setVector2(m_center, x, y);
         SetCenter(x, y);
     }
     void setCenter(const Vector2f& center)
@@ -251,8 +285,7 @@ public:
     }
     void setSize(float width, float height)
     {
-        m_size.x = width;
-        m_size.y = height;
+        is::setVector2(m_size, width, height);
         SetSize(m_size.x, m_size.y);
     }
     void setSize(const Vector2f& size)
@@ -305,10 +338,14 @@ public:
         SetView(m_view);
     }
 
-    template<class T1>
-    void clear(T1 &color)
+    void clear(sf::Color const &color)
     {
         is::clear(*this, color);
+    }
+
+    void clear()
+    {
+        is::clear(*this);
     }
 
     template<class T1>
@@ -450,6 +487,14 @@ public:
     {
         setPosition(v.x, v.y);
     }
+    void move(const Vector2f &v)
+    {
+        move(v.x, v.y);
+    }
+    void move(float x, float y)
+    {
+        setPosition(m_position.x + x, m_position.y + y);
+    }
     void setScale(float x, float y)
     {
         is::setVector2(m_scale, x, y);
@@ -522,8 +567,8 @@ public:
     virtual const Rect getTextureRect() const noexcept
     {
         Rect aabb;
-        aabb.width = m_texture->width();
-        aabb.height = m_texture->height();
+        aabb.width = m_size.x;
+        aabb.height = m_size.y;
         return aabb;
     }
 
@@ -554,14 +599,17 @@ public:
 class CircleShape : public Shape
 {
 public:
-    CircleShape(float raduis) : Shape(smk::Shape::Circle(raduis)) {}
+    CircleShape();
+    CircleShape(float raduis) : Shape(smk::Shape::Circle(raduis)) {is::setVector2(m_size, raduis, raduis);}
+    void setRadius(float raduis);
+    float getRadius() {return m_size.x;}
 };
 
 class RectangleShape : public Shape
 {
 public:
     static smk::Transformable RoundedRectangle(float width, float height, float radius);
-    RectangleShape() : Shape(RoundedRectangle(0.f, 0.f, 0.f)) {}
+    RectangleShape();
     RectangleShape(float width, float height, float raduis = 0.f) : Shape(RoundedRectangle(width, height, raduis))
     {
         is::setVector2(ObjectWrapper::m_size, width, height);
@@ -580,11 +628,7 @@ public:
     Sprite(Texture &texture) : ObjectWrapper(texture) {}
     Sprite(RenderTexture &renderTexture) : ObjectWrapper(renderTexture) {}
 
-    void setTexture(const sf::Texture& texture)
-    {
-        SetTexture(texture);
-        is::setVector2(m_size, texture.width(), texture.height());
-    }
+    void setTexture(sf::Texture& texture);
     void setTextureRect(IntRect rec);
 };
 
@@ -671,48 +715,36 @@ private:
 class Time
 {
 public:
-    Time() : m_microseconds(1.f) {};
-    Time(float second) : m_microseconds(second) {};
-    float asMicroseconds() {return m_microseconds;}
-    float asMilliseconds() {return m_microseconds;}
-    float asSeconds()      {return m_microseconds;}
+    Time() : m_microseconds(0.f) {};
+    float asSeconds()      const {return m_microseconds / 1000000.f;}
+    Int32 asMilliseconds() const {return static_cast<Int32>(m_microseconds / 1000);}
+    Int64 asMicroseconds() const {return m_microseconds;}
 
-    void operator =(const float val)
-    {
-        m_microseconds = val;
-    }
+    static const Time Zero;
+    bool operator>(const Time& time) const {return asMicroseconds() > time.asMicroseconds();}
+    bool operator<(const Time& time) const {return asMicroseconds() < time.asMicroseconds();}
 
 private:
-    float m_microseconds;
+    friend Time seconds(float);
+    friend Time milliseconds(Int32);
+    friend Time microseconds(Int64);
+    explicit Time(Int64 microseconds) : m_microseconds(microseconds){}
+    Int64 m_microseconds;
 };
 
-inline Time operator -(Time left, Time right)
-{
-    return Time(left.asMicroseconds() - right.asMicroseconds());
-}
-inline Time operator +(Time left, Time right)
-{
-    return Time(left.asMicroseconds() + right.asMicroseconds());
-}
+Time seconds(float amount);
+Time milliseconds(Int32 amount);
+Time microseconds(Int64 amount);
 
 class Clock
 {
 public:
-    Clock() {}
-    Time getElapsedTime()
-    {
-        //std::chrono::steady_clock::time_point end = std::chrono::system_clock::now();
-        //return Time(std::chrono::duration<float>(m_startTime - end).count());
-        return Time(1.f);
-    }
-    Time restart()
-    {
-        //m_startTime = std::chrono::system_clock::now();
-        return Time(1.f);
-    }
+    Clock();
+    const Time getElapsedTime();
+    Time restart();
 
-//private:
-//    std::chrono::steady_clock::time_point m_startTime;
+private:
+    Time m_startTime;
 };
 
 class SoundBuffer : public smk::SoundBuffer

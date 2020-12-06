@@ -13,12 +13,6 @@
 #include "../sound/GSM.h"
 #include "../graphic/GRM.h"
 
-#if defined(__ANDROID__)
-#if defined(IS_ENGINE_USE_ADMOB)
-#include "../android/AdmobManager.h"
-#endif
-#endif // defined
-
 namespace is
 {
 #if !defined(IS_ENGINE_HTML_5)
@@ -42,59 +36,6 @@ public:
 
     GameDisplay(sf::RenderWindow &window, sf::View &view, is::Render &surface, GameSystemExtended &gameSysExt, sf::Color bgColor);
     virtual ~GameDisplay();
-
-#if defined(__ANDROID__)
-#if defined(IS_ENGINE_USE_ADMOB)
-    virtual void setAdmob(AdmobManager *admob)
-    {
-        m_admobManager = admob;
-    }
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Display the reward video ads (run only when the request is successful)
-    ///
-    /// \return 1 if the reward video has been read correctly 0 if not
-    ////////////////////////////////////////////////////////////
-    virtual int rewardVideoStep()
-    {
-        int result(0);
-        if (checkAdState(firebase::admob::rewarded_video::LoadAdLastResult()))
-        {
-            bool stopGameTread(true);
-            firebase::admob::rewarded_video::Show(m_admobManager->m_activity->clazz);
-            showTempLoading();
-
-            if (checkAdState(firebase::admob::rewarded_video::ShowLastResult()))
-            {
-                while (stopGameTread)
-                {
-                    float dTime = getDeltaTime();
-                    if (firebase::admob::rewarded_video::presentation_state() ==
-                        firebase::admob::rewarded_video::kPresentationStateHidden)
-                        stopGameTread = false;
-                    sf::Event ev;
-                    while (m_window.pollEvent(ev))
-                    {
-                        if (ev.type == sf::Event::Closed)
-                        {
-                            m_window.close();
-                            is::closeApplication();
-                        }
-                    }
-                    m_window.clear(sf::Color::Black);
-                    m_window.display();
-                }
-
-                // End of video
-                result = 1;
-                m_admobManager->checkAdRewardObjReinitialize();
-            }
-        }
-        else m_admobManager->loadRewardVideo();
-        return result;
-    }
-#endif // defined
-#endif // defined
 
     ////////////////////////////////////////////////////////////
     /// \brief Update scene behavior
@@ -309,7 +250,11 @@ public:
                         #endif // defined
                         )
     {
-        return is::mouseCollision(m_window, obj);
+        return is::mouseCollision(m_window, obj
+#if defined(__ANDROID__)
+                                  , finger
+#endif
+                                  );
     }
 
     //////////////////////////////////////////////////////
@@ -327,7 +272,11 @@ public:
                         #endif // defined
                         )
     {
-        return is::mouseCollision(m_window, obj, position);
+        return is::mouseCollision(m_window, obj, position
+#if defined(__ANDROID__)
+                                 , finger
+#endif
+                                 );
     }
 
     #if defined(IS_ENGINE_USE_SDM)
@@ -429,7 +378,7 @@ public:
         centerSFMLObj(m_txtMsgBoxYes);
         centerSFMLObj(m_txtMsgBoxNo);
         centerSFMLObj(m_txtMsgBoxOK);
-
+        setView();
         setSFMLObjX_Y(m_recMsgBox, sf::Vector2f(m_view.getCenter().x, m_view.getCenter().y));
         setSFMLObjX_Y(m_sprMsgBox, sf::Vector2f(m_view.getCenter().x, m_view.getCenter().y));
         const float dim(6.f),
@@ -466,8 +415,6 @@ public:
         is::setSFMLObjAlpha2(m_txtMsgBoxYes, m_msgWaitTime);
         is::setSFMLObjAlpha2(m_txtMsgBoxOK, m_msgWaitTime);
         is::setSFMLObjAlpha2(m_txtMsgBox, m_msgWaitTime);
-
-        setView();
     }
 
     /// Allows to manage focus and closing events
@@ -521,11 +468,6 @@ protected:
     sf::Sprite m_sprMsgBox, m_sprMsgBoxButton1, m_sprMsgBoxButton2, m_sprMsgBoxButton3;
     sf::Text m_txtMsgBox, m_txtMsgBoxYes, m_txtMsgBoxNo, m_txtMsgBoxOK;
     sf::RectangleShape m_recMsgBox;
-#if defined(__ANDROID__)
-#if defined(IS_ENGINE_USE_ADMOB)
-    AdmobManager *m_admobManager;
-#endif // defined
-#endif // defined
 };
 }
 

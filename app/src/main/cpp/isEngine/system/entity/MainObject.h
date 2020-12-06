@@ -269,6 +269,12 @@ public:
     /// Return y of main sprite
     virtual float getSpriteY() const;
 
+    /// Return the sprite texture width
+    virtual int getTextureWidth() const;
+
+    /// Return the sprite texture height
+    virtual int getTextureHeight() const;
+
     /// Return the ID of object (instance number)
     virtual int getInstanceId() const;
 
@@ -295,6 +301,9 @@ public:
 
     /// Return the y center of main sprite
     virtual int getSpriteCenterY() const;
+
+    /// Return the number of sub-images according to the width of the sprite
+    virtual int getSpriteNumberSubImage(int subImageWidth) const;
 
     /// Return the active value
     virtual bool getIsActive() const;

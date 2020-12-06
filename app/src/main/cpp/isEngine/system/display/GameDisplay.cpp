@@ -23,8 +23,8 @@ GameDisplay::GameDisplay(sf::RenderWindow &window, sf::View &view, is::Render &s
     m_optionIndex(0),
     m_waitTime(0),
     m_msgWaitTime(0),
-    m_sceneWidth(window.getSize().x),
-    m_sceneHeight(window.getSize().y),
+    m_sceneWidth(is::GameConfig::VIEW_WIDTH),
+    m_sceneHeight(is::GameConfig::VIEW_HEIGHT),
     DELTA_TIME(0.f),
     m_viewW(is::GameConfig::VIEW_WIDTH),
     m_viewH(is::GameConfig::VIEW_HEIGHT),
@@ -42,13 +42,8 @@ GameDisplay::GameDisplay(sf::RenderWindow &window, sf::View &view, is::Render &s
     m_msgBoxMouseInCollison(false)
 {
     setViewSize(m_viewW, m_viewH);
+    setView(m_viewX, m_viewY);
     m_windowBgColor = bgColor;
-
-#if defined(__ANDROID__)
-#if defined(IS_ENGINE_USE_ADMOB)
-    m_admobManager = nullptr;
-#endif // definded
-#endif // defined
 }
 
 GameDisplay::~GameDisplay() {}
@@ -222,7 +217,7 @@ void GameDisplay::updateMsgBox(int sliderDirection, bool rightSideValidation,
 
     if (m_msgWaitTime == 255 && m_windowIsActive)
     {
-        // If is YES / NO message box
+        // If it's YES / NO message box
         if (m_mbYesNo)
         {
             if (((m_gameSysExt.keyIsPressed(is::GameConfig::KEY_LEFT) &&
@@ -269,7 +264,7 @@ void GameDisplay::updateMsgBox(int sliderDirection, bool rightSideValidation,
                 is::setSFMLObjFillColor(m_txtMsgBoxYes, textDefaultColor);
             }
         }
-        else // If is OK message box
+        else // If it's OK message box
         {
             if (mouseCollision(m_sprMsgBoxButton3) && m_msgAnswer == MsgAnswer::NO)
             {
@@ -386,10 +381,8 @@ void GameDisplay::showTempLoading(float time)
 {
     float timeToQuit(0.f);
     sf::Sprite sprTmploading, sprTmploading2;
-    is::createSprite(GRMgetTexture("temp_loading"), sprTmploading, sf::IntRect(0, 0, 640, 480),
-                     sf::Vector2f(0.f, 0.f), sf::Vector2f(320.f, 240.f));
-    is::createSprite(GRMgetTexture("loading_icon"), sprTmploading2, sf::IntRect(0, 0, 32, 32),
-                     sf::Vector2f(304.f, 240.f), sf::Vector2f(16.f, 16.f));
+    is::createSprite(GRMgetTexture("temp_loading"), sprTmploading, sf::Vector2f(m_viewX, m_viewY), sf::Vector2f(320.f, 240.f));
+    is::createSprite(GRMgetTexture("loading_icon"), sprTmploading2, sf::Vector2f(m_viewX, m_viewY), sf::Vector2f(16.f, 16.f));
     while (timeToQuit < time)
     {
         float dTime = getDeltaTime();
@@ -399,15 +392,7 @@ void GameDisplay::showTempLoading(float time)
         sf::Event ev;
         while (m_window.pollEvent(ev))
         {
-            if (ev.type == sf::Event::Closed)
-            {
-                m_window.close();
-                #if defined (__ANDROID__)
-                is::closeApplication();
-                #else
-                m_isRunning = false;
-                #endif // defined
-            }
+            if (ev.type == sf::Event::Closed) is::closeApplication();
         }
         #endif // defined
         is::clear(m_window, sf::Color::Black);
@@ -505,27 +490,11 @@ sf::Vector2f GameDisplay::getCursor(
                                     #endif // defined
                                     ) const
 {
-    sf::Vector2i pixelPos =
-    #if defined(__ANDROID__)
-                            sf::Touch::getPosition(finger, m_window);
-    #else
-                            sf::Mouse::getPosition(m_window);
-    #endif // defined
-
-    #if !defined(IS_ENGINE_HTML_5)
-    sf::Vector2f worldPos = m_window.mapPixelToCoords(pixelPos, m_window.getView());
-    #else
-    sf::Vector2i worldPos = pixelPos;
-    #endif
-    float dx = pointDistance(m_window.getView().getCenter().x, m_window.getView().getCenter().y,
-                             worldPos.x, m_window.getView().getCenter().y);
-    float dy = pointDistance(m_window.getView().getCenter().x, m_window.getView().getCenter().y,
-                             m_window.getView().getCenter().x, worldPos.y);
-
-    if (worldPos.x < m_window.getView().getCenter().x) dx *= -1;
-    if (worldPos.y < m_window.getView().getCenter().y) dy *= -1;
-
-    return sf::Vector2f(m_window.getView().getCenter().x + dx, m_window.getView().getCenter().y + dy);
+    return is::getCursor(m_window
+                       #if defined(__ANDROID__)
+                       , finger
+                       #endif // defined
+                       );
 }
 
 bool GameDisplay::inViewRec(is::MainObject *obj, bool useTexRec)
@@ -566,6 +535,12 @@ void GameDisplay::SDMmanageScene()
 
     // even loop
     SDMmanageSceneEvents();
+
+#if defined(__ANDROID__)
+#if defined(IS_ENGINE_USE_ADMOB)
+    if (m_gameSysExt.m_admobManager->m_relaunchAd) m_gameSysExt.m_admobManager->showBannerAd();
+#endif
+#endif
 
     // starting mechanism
     if (m_sceneStart)

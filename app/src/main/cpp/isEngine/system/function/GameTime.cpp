@@ -33,9 +33,9 @@ GameTime::~GameTime()
 {
 }
 
-void GameTime::step(float const &DELTA_TIME, float const &VALUE_CONVERSION, float const &VALUE_TIME)
+void GameTime::step(float const &DELTA_TIME)
 {
-    if (m_mSecond > 0) m_mSecond -= static_cast<int>((VALUE_CONVERSION * VALUE_TIME) * DELTA_TIME);
+    if (m_mSecond > 0) m_mSecond -= static_cast<int>((is::VALUE_CONVERSION * is::VALUE_TIME) * DELTA_TIME);
     else
     {
         if (m_second == 0)
@@ -116,7 +116,7 @@ unsigned int GameTime::getMSecond() const
 
 bool GameTime::compareTime(unsigned int m, unsigned int s, unsigned int ms) const
 {
-    return (((m * 3600) + (s * 60) + ms) > getTimeValue());
+    return (((m * 3600) + (s * 60) + ms) >= getTimeValue());
 }
 
 std::string GameTime::getTimeString() const

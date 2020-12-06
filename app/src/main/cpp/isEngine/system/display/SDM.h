@@ -56,6 +56,7 @@ public:
         m_SDMsortArray = true;
     }
 
+    /*
     //////////////////////////////////////////////////////
     /// \brief Allows to add SFML Sprite in SDM container
     ///
@@ -72,6 +73,7 @@ public:
         m_SDMObjectsDraw = true;
         m_SDMsortArray = true;
     }
+    */
 
     //////////////////////////////////////////////////////
     /// \brief Allows to add SFML Sprite in SDM container

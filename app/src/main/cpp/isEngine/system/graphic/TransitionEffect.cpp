@@ -8,7 +8,9 @@ TransitionEffect::TransitionEffect(is::GameDisplay *scene):
     m_scene(scene),
     m_transitionEnd(false)
 {
+    m_strName = "TransitionEffect";
     m_imageAlpha = 255;
+    m_depth = -999999999;
 
     // transition rectangle
     is::createRectangle(m_recTransition, sf::Vector2f(scene->getViewW() + 10.f, scene->getViewH() + 10.f),

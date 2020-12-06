@@ -7,7 +7,10 @@ GameSlider::GameSlider(is::GameDisplay *scene):
     Type(SLIDE_NONE),
     m_scene(scene),
     m_slideDistance(64.f)
-{}
+{
+    m_strName = "GameSlider";
+    m_depth = 999999999; // will update this object before all others
+}
 
 void GameSlider::step(float const &DELTA_TIME)
 {

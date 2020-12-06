@@ -179,9 +179,6 @@ T pointDirection(float x1, float y1, float x2, float y2)
     return result;
 }
 
-/// Return distance between two points (x1, y1) and (x2, y2)
-float pointDistance(float x1, float y1, float x2, float y2);
-
 /// Convert radian to grade
 float radToDeg(float x);
 
@@ -244,14 +241,14 @@ float getSFMLObjXScale(T &obj)
     return obj.getScale().x;
 }
 
-/// Return the y scale size of SFML object
+/// Return the scale size of SFML object
 template <class T>
 float getSFMLObjYScale(T &obj)
 {
     return obj.getScale().y;
 }
 
-/// Return the x width of SFML object
+/// Return the width of SFML object
 template <class T>
 float getSFMLObjWidth(T &obj)
 {
@@ -263,6 +260,30 @@ template <class T>
 float getSFMLObjHeight(T &obj)
 {
     return obj.getGlobalBounds().height;
+}
+
+/// Return the width of SFML texture
+inline int getSFMLTextureWidth(sf::Texture const &obj)
+{
+    return obj.getSize().x;
+}
+
+/// Return the height of SFML texture
+inline int getSFMLTextureHeight(sf::Texture const &obj)
+{
+    return obj.getSize().y;
+}
+
+/// Return the width of SFML texture
+inline int getSFMLTextureWidth(sf::Texture const *obj)
+{
+    return obj->getSize().x;
+}
+
+/// Return the height of SFML texture
+inline int getSFMLTextureHeight(sf::Texture const *obj)
+{
+    return obj->getSize().y;
 }
 
 /// Return the x origin of SFML object
@@ -412,14 +433,12 @@ void setSFMLObjAlpha2(T &obj, unsigned int alpha)
     obj.setFillColor(sf::Color(obj.getFillColor().r, obj.getFillColor().g, obj.getFillColor().b, alpha));
 }
 
-#if !defined(IS_ENGINE_HTML_5)
 /// Set the alpha and uniform RGB color of SFML object
 template <class T>
 void setSFMLObjAlpha(T &obj, unsigned int alpha, sf::Uint8 rgb)
 {
     obj.setColor(sf::Color(rgb, rgb, rgb, alpha));
 }
-#endif
 
 /// Set the alpha and RGB distinct color of SFML object
 template <class T>
@@ -481,11 +500,37 @@ void setSFMLObjTexRec(T &obj, int x, int y, int w, int h)
     obj.setTextureRect(sf::IntRect(x, y, w, h));
 }
 
-/// Set the graphic properties of SFML object
-template <class T>
-void setSFMLObjProperties(T &obj, float x, float y, float angle = 0.f, int alpha = 255, float xScale = 1.f, float yScale = 1.f)
+/// Set the properties of SFML Sprite
+inline void setSFMLObjProperties(sf::Sprite &obj, float x, float y, float angle = 0.f, int alpha = 255, float xScale = 1.f, float yScale = 1.f)
 {
     is::setSFMLObjAlpha(obj, alpha);
+    is::setSFMLObjAngle(obj, angle);
+    is::setSFMLObjScaleX_Y(obj, xScale, yScale);
+    is::setSFMLObjX_Y(obj, x, y);
+}
+
+/// Set the properties of SFML Text
+inline void setSFMLObjProperties(sf::Text &obj, float x, float y, float angle = 0.f, int alpha = 255, float xScale = 1.f, float yScale = 1.f)
+{
+    is::setSFMLObjAlpha2(obj, alpha);
+    is::setSFMLObjAngle(obj, angle);
+    is::setSFMLObjScaleX_Y(obj, xScale, yScale);
+    is::setSFMLObjX_Y(obj, x, y);
+}
+
+/// Set the properties of SFML Rectangle
+inline void setSFMLObjProperties(sf::RectangleShape &obj, float x, float y, float angle = 0.f, int alpha = 255, float xScale = 1.f, float yScale = 1.f)
+{
+    is::setSFMLObjAlpha2(obj, alpha);
+    is::setSFMLObjAngle(obj, angle);
+    is::setSFMLObjScaleX_Y(obj, xScale, yScale);
+    is::setSFMLObjX_Y(obj, x, y);
+}
+
+/// Set the properties of SFML Circle
+inline void setSFMLObjProperties(sf::CircleShape &obj, float x, float y, float angle = 0.f, int alpha = 255, float xScale = 1.f, float yScale = 1.f)
+{
+    is::setSFMLObjAlpha2(obj, alpha);
     is::setSFMLObjAngle(obj, angle);
     is::setSFMLObjScaleX_Y(obj, xScale, yScale);
     is::setSFMLObjX_Y(obj, x, y);
@@ -772,6 +817,18 @@ void centerSFMLObjY(T &obj)
 }
 
 //////////////////////////////////////////////////////
+/// \brief Return Cursor Position
+/// the mouse on PC platform / touch on mobile
+///
+/// \param finger Finger index (on Android)
+//////////////////////////////////////////////////////
+sf::Vector2f getCursor(sf::RenderWindow &window
+                        #if defined(__ANDROID__)
+                        , unsigned int finger = 0
+                        #endif // defined
+                        );
+
+//////////////////////////////////////////////////////
 /// \brief Test the collision of the SFML objects
 /// with the mouse cursor on PC platform / touch on mobile
 ///
@@ -785,29 +842,15 @@ bool mouseCollision(sf::RenderWindow &window, T const &obj
                     #endif // defined
                     )
 {
-    sf::Vector2i pixelPos =
-    #if defined(__ANDROID__)
-                            sf::Touch::getPosition(finger, window);
-    #else
-                            sf::Mouse::getPosition(window);
-    #endif // defined
-
-    #if !defined(IS_ENGINE_HTML_5)
-    sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, window.getView());
-    #else
-    sf::Vector2i worldPos = pixelPos;
-    #endif
-    float dx = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
-                             worldPos.x, window.getView().getCenter().y);
-    float dy = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
-                             window.getView().getCenter().x, worldPos.y);
-
-    if (worldPos.x < window.getView().getCenter().x) dx *= -1;
-    if (worldPos.y < window.getView().getCenter().y) dy *= -1;
+    sf::Vector2f cursorPos = is::getCursor(window
+                                       #if defined(__ANDROID__)
+                                       , finger
+                                       #endif // defined
+                                       );
 
     // A rectangle that will allow to test with the SFML object
-    sf::RectangleShape recCursor(sf::Vector2f(3.f, 3.f));
-    is::setSFMLObjX_Y(recCursor, window.getView().getCenter().x + dx, window.getView().getCenter().y + dy);
+    sf::RectangleShape recCursor(sf::Vector2f(6.f, 6.f));
+    is::setSFMLObjX_Y(recCursor, cursorPos.x - 3.f, cursorPos.y - 3.f);
     if (obj.getGlobalBounds().intersects(recCursor.getGlobalBounds())) return true;
     return false;
 }
@@ -827,31 +870,16 @@ bool mouseCollision(sf::RenderWindow &window, T const &obj, sf::Vector2f &positi
                     #endif // defined
                     )
 {
-    sf::Vector2i pixelPos =
-    #if defined(__ANDROID__)
-                            sf::Touch::getPosition(finger, window);
-    #else
-                            sf::Mouse::getPosition(window);
-    #endif // defined
-
-    #if !defined(IS_ENGINE_HTML_5)
-    sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, window.getView());
-    #else
-    sf::Vector2i worldPos = pixelPos;
-    #endif
-    float dx = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
-                             worldPos.x, window.getView().getCenter().y);
-    float dy = pointDistance(window.getView().getCenter().x, window.getView().getCenter().y,
-                             window.getView().getCenter().x, worldPos.y);
-
-    if (worldPos.x < window.getView().getCenter().x) dx *= -1;
-    if (worldPos.y < window.getView().getCenter().y) dy *= -1;
-
-    setVector2(position, window.getView().getCenter().x + dx, window.getView().getCenter().y + dy);
+    sf::Vector2f cursorPos = is::getCursor(window
+                                       #if defined(__ANDROID__)
+                                       , finger
+                                       #endif // defined
+                                       );
+    setVector2(position, cursorPos.x, cursorPos.y);
 
     // A rectangle that will allow to test with the SFML object
-    sf::RectangleShape recCursor(sf::Vector2f(3.f, 3.f));
-    is::setSFMLObjX_Y(recCursor, position.x, position.y);
+    sf::RectangleShape recCursor(sf::Vector2f(6.f, 6.f));
+    is::setSFMLObjX_Y(recCursor, position.x - 3.f, position.y - 3.f);
     if (obj.getGlobalBounds().intersects(recCursor.getGlobalBounds())) return true;
     return false;
 }
