@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="is-Engine-Tutorial/app" />
+      <module fileurl="file://$PROJECT_DIR$/is-Engine.iml" filepath="$PROJECT_DIR$/is-Engine.iml" group="is-Engine" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/is-Engine-Tutorial.iml" filepath="$PROJECT_DIR$/.idea/modules/is-Engine-Tutorial.iml" group="is-Engine-Tutorial" />
+    </modules>
+  </component>
+</project>

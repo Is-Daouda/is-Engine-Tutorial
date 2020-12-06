@@ -1,38 +1,21 @@
-# is::Engine Tutorial Project
+# is::Engine Tutorial (Complete) Arkanoid
+### Compatible Platforms:
+- Android
+- Web (HTML 5 - CSS 3)
+- Windows / Linux
 
-Project of the tutorial which is in the **[user guide](https://github.com/Is-Daouda/is-Engine/tree/2.2.x/doc)** of the game engine **[is::Engine](https://github.com/Is-Daouda/is-Engine)**. The project was built with these different components: **Virtual Game Pad for Android, Keyboard, Standard Engine Function, Scenes, Language Manager, Sprite Animation, RPG Dialog Box, Basic Collision Engine, Stopwatch. Scene Transition.**
+### Supported tools:
+- [Android Studio](https://github.com/Is-Daouda/is-Engine#-android-studio)
+- [Code::Blocks](https://github.com/Is-Daouda/is-Engine#-codeblocks)
+- [CMake](https://github.com/Is-Daouda/is-Engine#-cmake)
+- [Emscripten](https://github.com/Is-Daouda/is-Engine#-web-html-5---css-3)
+- [Qt](https://github.com/Is-Daouda/is-Engine#-qt-creator)
+- [Visual Studio Code](https://github.com/Is-Daouda/is-Engine#-visual-studio-code)
 
-### Android Screenshot
-![Android Screenshot](./images/demo_screen_android.png)
+### Description:
+This project was created thanks to the [Youtube Tutorial](https://youtu.be/wo2-ofNB7Hw) which shows how to create a game with is::Engine.
+It already contains the resources (sprites, sounds, fonts) and the **source code**.
 
-### PC Screenshot
-![PC Screenshot](./images/demo_screen_pc.png)
-
-## In this directory you have tree (4) projects :
-- **AndroidStudio**        : for Android development with Android Studio
-- **CodeBlocks**           : for PC development with Code::Blocks
-- **CMake**           	   : for PC development with CMake
-- **VSCode**               : for PC development with Visual Studio Code
-
-## Prerequisites
-- SFML Library (2.4 +)
-
-**AndroidStudio**
-- Install Android Studio (3.1.3 +)
-- Android SDK and NDK (r12b)
-- Firebase C++ SDK 4.5.0 (If you need it)
-
-**CodeBlocks**
-- Install Code::Blocks (20.03)
-- GCC Compiler
-
-**CMake**
-- CMake (3.1 +)
-
-**VSCode**
-- Visual Studio Code (1.42.0 +)
-- GCC Compiler
-- Git Bash (For Windows only)
-
-## Todo
-Everything has already been configured all you need to do in relation to the tree (4) projects is to link the libraries
+![image 1](./images/image_1.png)
+![image 2](./images/image_2.png)
+![image 3](./images/image_3.png)
