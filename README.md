@@ -16,6 +16,9 @@
 This project was created thanks to the [Youtube Tutorial](https://youtu.be/wo2-ofNB7Hw) which shows how to create a game with is::Engine.
 It already contains the resources (sprites, sounds, fonts) and the **source code**.
 
+### Web game link:
+► http://is-daouda.github.io/
+
 ![image 1](./images/image_1.png)
 ![image 2](./images/image_2.png)
 ![image 3](./images/image_3.png)
