@@ -9,7 +9,7 @@
 - [Code::Blocks](https://github.com/Is-Daouda/is-Engine#-codeblocks)
 - [CMake](https://github.com/Is-Daouda/is-Engine#-cmake)
 - [Emscripten](https://github.com/Is-Daouda/is-Engine#-web-html-5---css-3)
-- [Qt](https://github.com/Is-Daouda/is-Engine#-qt-creator)
+- [Qt](https://github.com/Is-Daouda/is-Engine#-qt)
 - [Visual Studio Code](https://github.com/Is-Daouda/is-Engine#-visual-studio-code)
 
 ### Description:
