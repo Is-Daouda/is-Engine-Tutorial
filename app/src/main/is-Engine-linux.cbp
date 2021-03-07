@@ -47,7 +47,6 @@
 			<Add option="-std=c++17" />
 		</Compiler>
 		<Unit filename="cpp/app_src/activity/GameActivity.h" />
-		<Unit filename="cpp/app_src/activity/SwooshFiles.h" />
 		<Unit filename="cpp/app_src/config/ExtraConfig.h" />
 		<Unit filename="cpp/app_src/config/GameConfig.h" />
 		<Unit filename="cpp/app_src/gamesystem_ext/GameSystemExtended.cpp" />
@@ -221,8 +220,13 @@
 		<Unit filename="cpp/isEngine/system/graphic/GameTexture.h" />
 		<Unit filename="cpp/isEngine/system/graphic/TransitionEffect.cpp" />
 		<Unit filename="cpp/isEngine/system/graphic/TransitionEffect.h" />
-		<Unit filename="cpp/isEngine/system/isEngineWrapper.cpp" />
-		<Unit filename="cpp/isEngine/system/isEngineWrapper.h" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineSDLWrapper.cpp" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineSDLWrapper.h" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineSMKWrapper.cpp" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineSMKWrapper.h" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineWrapper.cpp" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isEngineWrapper.h" />
+		<Unit filename="cpp/isEngine/system/islibconnect/isLibConnect.h" />
 		<Unit filename="cpp/isEngine/system/sound/GSM.h" />
 		<Unit filename="cpp/isEngine/system/sound/GameMusic.h" />
 		<Unit filename="cpp/isEngine/system/sound/GameSound.h" />

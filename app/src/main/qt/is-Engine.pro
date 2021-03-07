@@ -20,7 +20,6 @@ DEFINES += IS_ENGINE_QT
 # Game source files
 HEADERS += \
 		../cpp/app_src/activity/GameActivity.h \
-		../cpp/app_src/activity/SwooshFiles.h \
 		../cpp/app_src/config/ExtraConfig.h \
 		../cpp/app_src/config/GameConfig.h \
 		../cpp/app_src/gamesystem_ext/GameSystemExtended.h \
@@ -63,7 +62,8 @@ HEADERS += \
 		../cpp/isEngine/system/graphic/GameFont.h \
 		../cpp/isEngine/system/graphic/GameTexture.h \
 		../cpp/isEngine/system/graphic/TransitionEffect.h \
-		../cpp/isEngine/system/isEngineWrapper.h \
+        ../cpp/isEngine/system/islibconnect/isEngineWrapper.h \
+        ../cpp/isEngine/system/islibconnect/isLibConnect.h \
 		../cpp/isEngine/system/sound/GSM.h \
 		../cpp/isEngine/system/sound/GameMusic.h \
 		../cpp/isEngine/system/sound/GameSound.h \
@@ -127,7 +127,7 @@ SOURCES += \
         ../cpp/isEngine/system/function/GameSystem.cpp \
         ../cpp/isEngine/system/function/GameTime.cpp \
         ../cpp/isEngine/system/graphic/TransitionEffect.cpp \
-        ../cpp/isEngine/system/isEngineWrapper.cpp \
+        ../cpp/isEngine/system/islibconnect/isEngineWrapper.cpp \
         ../cpp/isEngine/ext_lib/Box2D/Collision/Shapes/b2ChainShape.cpp \
         ../cpp/isEngine/ext_lib/Box2D/Collision/Shapes/b2CircleShape.cpp \
         ../cpp/isEngine/ext_lib/Box2D/Collision/Shapes/b2EdgeShape.cpp \

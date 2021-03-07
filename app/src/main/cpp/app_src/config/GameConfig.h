@@ -14,7 +14,7 @@ namespace is
 enum DisplayOption
 {
     // example
-    // YOUR_SCENE ///< Access to your scene
+    // YOUR_SCENE, ///< Access to your scene
 };
 
 ////////////////////////////////////////////////////////////
