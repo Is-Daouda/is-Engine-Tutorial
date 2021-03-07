@@ -44,8 +44,9 @@ if(EMSCRIPTEN)
 	set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS " --llvm-opts 3")
 	set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS " -O3")
 	set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS " -flto")
+	set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS " --bind")
 	
-	# Copy the index.html file
+	# Copy the web files
 	configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/web/index.html
 	${CMAKE_CURRENT_BINARY_DIR}/index.html
@@ -61,13 +62,21 @@ if(EMSCRIPTEN)
 	${CMAKE_CURRENT_BINARY_DIR}/loading.png
 	COPYONLY
 	)
+	configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/web/sw.js
+	${CMAKE_CURRENT_BINARY_DIR}/sw.js
+	COPYONLY
+	)
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/web/images  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/web/scripts DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/web/styles  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 	
     # Allow some files to be fetched.
-    file(GLOB_RECURSE files "./assets/*")
+	file(GLOB files "./assets/*" "./assets/*/*")
 	foreach(file ${files})
-		file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} "${file}")
-		set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS " --preload-file \"${file}@/${relative_file}\"")
+		file(RELATIVE_PATH relative_file ${CMAKE_SOURCE_DIR} ${file})
+		set_property(TARGET isengine APPEND_STRING PROPERTY LINK_FLAGS  " --preload-file ${file}@/${relative_file}")
 	endforeach()
+else()
+	install(TARGETS isengine RUNTIME DESTINATION "bin")
 endif()
-
-#install(TARGETS isengine RUNTIME DESTINATION "bin")

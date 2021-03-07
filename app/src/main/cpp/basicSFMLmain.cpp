@@ -11,12 +11,13 @@ bool GameEngine::basicSFMLmain()
     m_window.create(sf::VideoMode::getDesktopMode(), "");
 
 #if defined(IS_ENGINE_USE_ADMOB)
-    ANativeActivity* activity = sf::getNativeActivity();
-    JNIEnv* env = activity->env;
-    JavaVM* vm = activity->vm;
-    vm->AttachCurrentThread(&env, NULL);
+    JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+    jobject activity = (jobject)SDL_AndroidGetActivity();
+    jclass clazz(env->GetObjectClass(activity));
+    JavaVM* vm;
+    env->GetJavaVM(&vm);
 
-    m_gameSysExt.m_admobManager = std::make_shared<AdmobManager>(m_window, activity, env, vm);
+    m_gameSysExt.m_admobManager = std::make_shared<AdmobManager>(m_window, activity, env);
     m_gameSysExt.m_admobManager->checkAdObjInit();
 #endif // definded
 #else
@@ -45,9 +46,10 @@ bool GameEngine::basicSFMLmain()
     // is::GameConfig::MUSIC_DIR, is::GameConfig::GUI_DIR, is::GameConfig::FONT_DIR
     // Are variables that return the path of resources located in the "assets" folder
 
-    // Load music
-    sf::Music music; // Music is played in the render loop. See line 164
-    is::loadSFMLMusic(music, is::GameConfig::MUSIC_DIR + "game_music.ogg");
+    // Load music buffer
+    sf::SoundBuffer musicBuffer; // Music is played in the render loop. See line 170
+    is::loadSFMLSoundBuffer(musicBuffer, is::GameConfig::MUSIC_DIR + "game_music.wav");
+    sf::Sound music(musicBuffer);
 
     // Load texture
     sf::Texture texture;
@@ -102,6 +104,16 @@ bool GameEngine::basicSFMLmain()
                 case sf::Event::Closed:
                     m_window.close();
                 break;
+
+				/* 					/!\ WARNING! /!\
+				 * This code is no longer usefull (you can remove it)
+				 *
+                 * case sf::Event::Resized:
+                 *    m_view.setSize(event.size.width, event.size.height);
+                 *    m_view.setCenter(event.size.width / 2, event.size.height / 2);
+                 *    m_window.setView(m_view);
+                 * break;
+				 */
 
                 #if defined(__ANDROID__)
                 case sf::Event::TouchBegan:

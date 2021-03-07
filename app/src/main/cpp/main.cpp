@@ -1,12 +1,23 @@
 #if defined(IS_ENGINE_VS_CODE)
 #include "Main.hpp"
 #endif
+#if defined(IS_ENGINE_HTML_5)
+#include <emscripten.h>
+#include <emscripten/bind.h>
+
+inline std::vector<std::string> *vectorFromIntPointer(uintptr_t vec) {
+  return reinterpret_cast<std::vector<std::string> *>(vec);
+}
+EMSCRIPTEN_BINDINGS(Wrappers) {
+  emscripten::register_vector<std::string>("VectorString").constructor(&vectorFromIntPointer, emscripten::allow_raw_pointers());
+};
+#endif
 #include "isEngine/core/GameEngine.h"
 
 ////////////////////////////////////////////////////////////
 /// \brief application entry point
 ////////////////////////////////////////////////////////////
-int main()
+int main(int argc, char * argv[])
 {
 #if defined(IS_ENGINE_VS_CODE)
 #if defined(_DEBUG)
@@ -29,7 +40,7 @@ int main()
 #endif // defined
 
     #if defined (__ANDROID__)
-    is::closeApplication();
+    std::terminate(); // close application
     #else
     return 0;
     #endif // defined

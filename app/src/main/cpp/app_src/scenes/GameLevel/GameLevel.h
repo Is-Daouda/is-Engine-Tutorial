@@ -10,8 +10,15 @@
 class GameLevel : public is::GameDisplay
 {
 public:
-    GameLevel(sf::RenderWindow &window, sf::View &view, is::Render &surface, is::GameSystemExtended &gameSysExt):
-        GameDisplay(window, view, surface, gameSysExt, sf::Color::Black /* => scene color*/) {}
+    /*  					/!\ WARNING! /!\
+     * This constructor is no longer supported in this version of the engine. Use the one below.
+     *
+     * GameLevel(sf::RenderWindow &window, sf::View &view, is::Render &surface, is::GameSystemExtended &gameSysExt):
+     *   GameDisplay(window, view, surface, gameSysExt, sf::Color::Black) {}
+     */
+
+    GameLevel(is::GameSystemExtended &gameSysExt):
+        GameDisplay(gameSysExt, sf::Color::Black /* => scene color*/) {}
 
     void loadResources() {
         // load font and texture
@@ -52,7 +59,7 @@ public:
         GSMaddSound("lose", is::GameConfig::SFX_DIR + "lose.wav");
         GSMaddSound("bounce_paddle", is::GameConfig::SFX_DIR + "bounce_paddle.wav");
         GSMaddSound("bounce_brick", is::GameConfig::SFX_DIR + "bounce_brick.wav");
-        GSMaddSound("level_start", is::GameConfig::SFX_DIR + "level_start.ogg");
+        GSMaddSound("level_start", is::GameConfig::SFX_DIR + "level_start.wav");
 
         GSMplaySound("level_start"); // Play music when the scene starts
     }
