@@ -33,6 +33,7 @@ GameSystem::GameSystem(sf::RenderWindow &window):
     m_enableSound = true;
     m_enableMusic = true;
     m_enableVibrate = true;
+    m_loadParentResources = false;
     m_keyIsPressed = false;
 }
 
@@ -137,6 +138,9 @@ bool GameSystem::fileExist(std::string const &fileName)
 void GameSystem::removeFile(std::string const &fileName)
 {
     remove(fileName.c_str());
+#if defined(IS_ENGINE_HTML_5)
+        EM_ASM(FS.syncfs(false, function(err){console.log(err)});, 0);
+#endif
 }
 
 void GameSystem::useVibrate(short ms)
