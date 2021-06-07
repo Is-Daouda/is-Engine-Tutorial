@@ -25,14 +25,14 @@ if (propertiesFile.exists()) {
 }
 */
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId = 'com.author.isengine'
         //Replace this with your real package name (e.g. com.StudioName.GameName)
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         //multiDexEnabled true
@@ -52,7 +52,7 @@ android {
         debug {
             minifyEnabled false
             jniDebuggable true
-            debuggable true
+            debuggable false
         }
         release {
             minifyEnabled = false
@@ -80,7 +80,4 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //implementation 'com.android.support:multidex:1.0.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
