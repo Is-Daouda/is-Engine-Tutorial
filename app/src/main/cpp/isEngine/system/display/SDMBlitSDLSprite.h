@@ -19,54 +19,27 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef GAMEMUSIC_H_INCLUDED
-#define GAMEMUSIC_H_INCLUDED
+#ifndef SDMBLITSDLSPRITE_H_INCLUDED
+#define SDMBLITSDLSPRITE_H_INCLUDED
 
-#include "../islibconnect/isLibConnect.h"
-#include "../entity/parents/Name.h"
-#include "../entity/parents/FilePath.h"
-
+#if defined(IS_ENGINE_SDL_2)
 namespace is
 {
 ////////////////////////////////////////////////////////////
-/// Class for manage SFML Music
+/// Class which allows to blit SDL sprites
 ////////////////////////////////////////////////////////////
-class GameMusic : public is::Name, public is::FilePath
+class SDMBlitSDLSprite
 {
 public:
-    GameMusic(const std::string& musicName, const std::string& filePath):
-        Name(musicName),
-        FilePath(filePath)
+    SDMBlitSDLSprite(std::string name, sf::Texture &tex):
+        m_strTextureName(name)
     {
-        if (m_music.openFromFile(m_strFilePath)) m_fileIsLoaded = true;
-        else showLog("ERROR: Can't load music : " + filePath);
+        m_sprBlit.setTexture(tex);
     }
-
-    virtual ~GameMusic() {}
-
-    void loadResources(const std::string&filePath)
-    {
-        if (m_music.openFromFile(filePath))
-        {
-            m_strFilePath = filePath;
-            m_fileIsLoaded = true;
-        }
-        else
-        {
-            m_fileIsLoaded = false;
-            showLog("ERROR: Can't load music : " + filePath);
-        }
-    }
-
-    /// Return music object
-    sf::Music& getMusic()
-    {
-        return m_music;
-    }
-
-private:
-    sf::Music m_music;
+    sf::Sprite m_sprBlit;
+    std::string m_strTextureName;
 };
 }
+#endif
 
-#endif // GAMEMUSIC_H_INCLUDED
+#endif // SDMBLITSDLSPRITE_H_INCLUDED
