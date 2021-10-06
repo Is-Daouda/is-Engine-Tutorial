@@ -12,7 +12,7 @@ public:
     {
         // We define the text with the default font of the engine, we also
         // assign the text "Game Over" and the value 32 as character size
-        is::createText(m_scene->getFontMsg(), m_txtGameOver, "Game Over", 320.f, 220.f, true, 32);
+        is::createText(m_scene->getFontMsg(), m_txtGameOver, "Game Over", 320.f, 240.f, true, 32);
     }
 
     void step(float const &DELTA_TIME)
