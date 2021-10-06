@@ -67,7 +67,7 @@
 		<Unit filename="cpp/app_src/gamesystem_ext/GameSystemExtended.cpp" />
 		<Unit filename="cpp/app_src/gamesystem_ext/GameSystemExtended.h" />
 		<Unit filename="cpp/app_src/language/GameLanguage.h" />
-		<Unit filename="cpp/app_src/levels/Level.h" />		
+		<Unit filename="cpp/app_src/levels/Level.h" />
 		<Unit filename="cpp/app_src/objects/widgets/GameDialog.cpp" />
 		<Unit filename="cpp/app_src/objects/widgets/GameDialog.h" />
 		<Unit filename="cpp/basicSFMLmain.cpp" />
