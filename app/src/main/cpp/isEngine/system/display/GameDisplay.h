@@ -321,7 +321,7 @@ public:
             if (m_gameSysExt.keyIsPressed(is::GameConfig::KEY_CANCEL))
             {
                 if (!m_showMsg) showMessageBox(is::lang::msg_quit_game[m_gameSysExt.m_gameLanguage]);
-                else if (m_msgWaitTime == 255) /* Allows to the close message box with the Cancel key when it is visible*/ m_keyBackPressed = true;
+                else if (m_msgWaitTime == 255) /* Allows to close the message box with the Cancel key when it is visible*/ m_keyBackPressed = true;
             }
             SDMcallObjectsEvents(event);
         }
