@@ -18,9 +18,9 @@ GameDialog::GameDialog(sf::Texture &tex, sf::Font &fnt, GameDisplay *m_scene) :
     m_strName = "GameDialog"; // object name
 
     m_imageScale = 0.f;
-    is::createText(fnt, m_txtDialog, "", m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_TEXT_COLOR, 16);
+    is::createText(fnt, m_txtDialog, "", m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_TEXT_COLOR, is::GameConfig::DEFAULT_RPG_DIALOG_TEXT_SIZE);
     is::createText(fnt, m_txtSkip, is::lang::pad_dialog_skip[m_scene->getGameSystem().m_gameLanguage],
-                   m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_SELECTED_TEXT_COLOR, true, 13);
+                   m_x, m_y, is::GameConfig::DEFAULT_RPG_DIALOG_SELECTED_TEXT_COLOR, true, is::GameConfig::DEFAULT_RPG_DIALOG_BUTTON_TEXT_SIZE);
     m_strDialog = "";
     is::createSprite(tex, m_sprParent, sf::IntRect(0, 0, 480, 96), sf::Vector2f(0.f, 0.f), sf::Vector2f(240.f, 48.f));
     is::createSprite(tex, m_sprNext, sf::IntRect(64, 96, 32, 32), sf::Vector2f(0.f, 0.f), sf::Vector2f(16.f, 16.f));
@@ -140,7 +140,7 @@ void GameDialog::step(const float &DELTA_TIME)
                           is::getSFMLObjY(m_sprParent) + 29.f);
 
         is::setSFMLObjX_Y(m_sprSkip, m_x, m_y + 145.f);
-        is::setSFMLObjX_Y(m_txtSkip, m_x, is::getSFMLObjY(m_sprSkip) - ((m_scene->getGameSystem().m_gameLanguage == 1) ? 4.f : 1.4f));
+        is::setSFMLObjX_Y(m_txtSkip, m_x, is::getSFMLObjY(m_sprSkip));
     }
 
     is::setSFMLObjScale(m_txtDialog, m_imageScale);
