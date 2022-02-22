@@ -22,17 +22,6 @@
 #if defined(IS_ENGINE_VS_CODE)
 #include "Main.hpp"
 #endif
-#if defined(IS_ENGINE_HTML_5)
-#include <emscripten.h>
-#include <emscripten/bind.h>
-
-inline std::vector<std::string> *vectorFromIntPointer(uintptr_t vec) {
-  return reinterpret_cast<std::vector<std::string> *>(vec);
-}
-EMSCRIPTEN_BINDINGS(Wrappers) {
-  emscripten::register_vector<std::string>("VectorString").constructor(&vectorFromIntPointer, emscripten::allow_raw_pointers());
-};
-#endif
 #include "isEngine/core/GameEngine.h"
 
 ////////////////////////////////////////////////////////////
@@ -48,13 +37,12 @@ int main(int argc, char * argv[])
     vectorArray.push_back(saveDir);
     EM_ASM(
         var vectorArray = new Module.VectorString($0);
-        console.log(vectorArray.get(0));
         FS.mkdir(vectorArray.get(0));
         FS.mount(IDBFS, {}, vectorArray.get(0));
         Module.print("Start file sync...");
         Module.syncdone = 0;
         FS.syncfs(true, function(err){
-                Module.print("End file sync../");
+                Module.print("End file sync..");
                 Module.syncdone = 1;
                 });
       , &vectorArray);
@@ -71,13 +59,13 @@ int main(int argc, char * argv[])
 	windowsHelper.setIcon(game.getRenderWindow().getSystemHandle());
 #endif
 #endif
-
+    game.
 #if defined(IS_ENGINE_USE_MAIN_LOOP)
-    game.play();
+        play
 #else
-    game.basicSFMLmain();
+        basicSFMLmain
 #endif
-
+        ();
 #if defined (__ANDROID__)
     std::terminate(); // close application
 #else
